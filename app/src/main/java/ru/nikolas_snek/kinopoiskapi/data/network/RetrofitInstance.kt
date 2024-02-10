@@ -5,11 +5,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 object RetrofitInstance {
-    val api: KinopoiskAPI by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://kinopoiskapiunofficial.tech/")
-            .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().build()))
-            .build()
-            .create(KinopoiskAPI::class.java)
-    }
+    private const val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
+
+    val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().build()))
+        .build()
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">KinopoiskAPI</string>
+    <string name="posterurlpreview">Постер фильма из свойства posterUrlPreview</string>
+    <string name="best_quality_film_poster_image">Best quality film poster image</string>
 </resources>

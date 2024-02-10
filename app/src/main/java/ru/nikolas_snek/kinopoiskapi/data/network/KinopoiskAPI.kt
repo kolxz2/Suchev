@@ -2,6 +2,7 @@ package ru.nikolas_snek.kinopoiskapi.data.network
 
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -9,12 +10,13 @@ interface KinopoiskAPI {
 
     @GET("api/v2.2/films/{filmId}")
     suspend fun getFullFilm(
-        @Path("filmId") studentHash: String,
-    ): Call<FullFilmsDto>
+        @Header("X-API-KEY") apiKey: String?,
+        @Path("filmId") filmId: Int,
+    ): FullFilmDto
 
-    @GET("v2.2/films/top")
-    suspend fun getShortFilms(
-        @Query("type") type: String,
-        @Query("page") page: Int
-    ): Call<List<ShortFilmDto>>
+    @GET("films/top?type=TOP_100_POPULAR_FILMS")
+    suspend fun getPopularFilms(
+        @Header("X-API-KEY") apiKey: String?,
+        @Query("page") page: Int,
+    ): ShortResponse
 }

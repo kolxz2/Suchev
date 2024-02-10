@@ -1,13 +1,11 @@
 package ru.nikolas_snek.kinopoiskapi.doimain
 
-import ru.nikolas_snek.kinopoiskapi.data.network.ResultRequest
-import ru.nikolas_snek.kinopoiskapi.data.network.ShortFilmDto
 import ru.nikolas_snek.kinopoiskapi.doimain.models.FullFilm
 import ru.nikolas_snek.kinopoiskapi.doimain.models.ShortFilms
 
 interface Repository {
 
-  suspend fun  getAllFilms() : ResultRequest<List<ShortFilmDto>>
+  suspend fun  getAllFilms() : List<ShortFilms>
 
-  suspend fun getFilmDetailInfo() : List<FullFilm>
+  suspend fun getFilmDetailInfo(filmId: Int) : FullFilm
 }

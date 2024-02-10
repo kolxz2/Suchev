@@ -1,7 +1,7 @@
 package ru.nikolas_snek.kinopoiskapi.doimain.models
 
 data class FullFilm(
-    val id: Int,
+    val filmId: Int,
     val nameRu: String,
     val posterUrl: String,
     val description: String,

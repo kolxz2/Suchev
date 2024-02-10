@@ -1,22 +1,26 @@
 package ru.nikolas_snek.kinopoiskapi.data
 
-import ru.nikolas_snek.kinopoiskapi.data.network.BaseRepository
-import ru.nikolas_snek.kinopoiskapi.data.network.ResultRequest
+import ru.nikolas_snek.kinopoiskapi.data.network.KinopoiskAPI
 import ru.nikolas_snek.kinopoiskapi.data.network.RetrofitInstance
-import ru.nikolas_snek.kinopoiskapi.data.network.ShortFilmDto
+import ru.nikolas_snek.kinopoiskapi.data.network.toFullFilm
+import ru.nikolas_snek.kinopoiskapi.data.network.toShortFilms
 import ru.nikolas_snek.kinopoiskapi.doimain.Repository
 import ru.nikolas_snek.kinopoiskapi.doimain.models.FullFilm
 import ru.nikolas_snek.kinopoiskapi.doimain.models.ShortFilms
 
-class RepositoryImpl : Repository ,  BaseRepository(){
-    override suspend fun getAllFilms() : ResultRequest<List<ShortFilmDto>>  {
-        return safeApiCall{
-            val response = RetrofitInstance.api.getShortFilms(type = "TOP_100_POPULAR_FILMS", page = 1) as List<ShortFilmDto>
-        }
+class RepositoryImpl : Repository {
+    companion object {
+        private const val X_API_KEY = "e30ffed0-76ab-4dd6-b41f-4c9da2b2735b"
     }
 
-    override suspend fun getFilmDetailInfo(): List<FullFilm> {
-        TODO("Not yet implemented")
+    private val movieService = RetrofitInstance.retrofit.create(KinopoiskAPI::class.java)
+    override suspend fun getAllFilms(): List<ShortFilms> =
+        movieService.getPopularFilms(apiKey = X_API_KEY, page = 1).films.map {
+            it.toShortFilms()
+        }
+
+    override suspend fun getFilmDetailInfo(filmId: Int): FullFilm {
+        return movieService.getFullFilm(filmId = filmId, apiKey = X_API_KEY).toFullFilm()
     }
 
 }
