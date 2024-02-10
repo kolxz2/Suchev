@@ -5,4 +5,5 @@ data class ShortFilms(
     val nameRu: String,
     val year: String,
     val posterUrlPreview: String,
+    val genres: List<Genres>
 )

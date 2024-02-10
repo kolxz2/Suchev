@@ -2,4 +2,11 @@
     <string name="app_name">KinopoiskAPI</string>
     <string name="posterurlpreview">Постер фильма из свойства posterUrlPreview</string>
     <string name="best_quality_film_poster_image">Best quality film poster image</string>
+    <string name="error_message">Произошла ошибка при загрузке данных, \n проверьте подключение к сети</string>
+    <string name="error_button">Повторить</string>
+    <string name="icon_error_view">icon error view</string>
+    <string name="genre_template">Жанры:</string>
+    <string name="country_template">Страны:</string>
+    <string name="short_info_template">%s (%s)</string>
+    <string name="icon_work_like_backpressed">Icon work like backpressed</string>
 </resources>

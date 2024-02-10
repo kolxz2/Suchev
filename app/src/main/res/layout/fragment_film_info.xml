@@ -1,68 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    <data>
+        <variable
+            name="fullFilm"
+            type="ru.nikolas_snek.kinopoiskapi.doimain.models.FullFilm"
+            />
+    </data>
+    <FrameLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="30dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
+
+
+        <ProgressBar
+            android:id="@+id/pb_full_film"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <ru.nikolas_snek.kinopoiskapi.presentation.utils.ErrorMessageView
+            android:id="@+id/em_full_film"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+
+        <ScrollView
+            android:id="@+id/sv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            tools:ignore="UselessParent">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+
+
+                <ImageView
+                    android:id="@+id/iv_film_poster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/best_quality_film_poster_image"
+                    android:scaleType="fitXY"
+                    app:filmPoster="@{fullFilm.posterUrl}"/>
+
+
+                <TextView
+                    android:id="@+id/tv_film_nameRu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="20dp"
+                    android:fontFamily="@font/font_roboto"
+                    android:paddingHorizontal="30dp"
+                    android:text="@{fullFilm.nameRu}"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    tools:text="Мастер и Маргарита" />
+
+                <TextView
+                    android:id="@+id/tv_film_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:fontFamily="@font/font_roboto_medium"
+                    android:paddingHorizontal="30dp"
+                    android:text="@{fullFilm.description}"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    tools:text="Мастер и Маргарита" />
+
+                <TextView
+                    android:id="@+id/tv_film_countries"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:fontFamily="@font/font_roboto_medium"
+                    android:paddingHorizontal="30dp"
+                    app:countryTemplate="@{fullFilm.countries}"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    tools:text="Мастер и Маргарита" />
+
+                <TextView
+                    android:id="@+id/tv_film_genres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:fontFamily="@font/font_roboto_medium"
+                    android:paddingHorizontal="30dp"
+                    app:genreTemplate="@{fullFilm.genres}"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    tools:text="Мастер и Маргарита" />
+
+            </LinearLayout>
+        </ScrollView>
+
 
         <ImageView
-            android:id="@+id/iv_film_poster"
-            android:layout_width="match_parent"
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/best_quality_film_poster_image"
-            android:scaleType="fitXY" />
+            android:layout_gravity="start|top"
+            android:paddingVertical="10dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:paddingHorizontal="10dp"
+            android:src="@drawable/ic_back"
+            android:contentDescription="@string/icon_work_like_backpressed" />
 
-
-        <TextView
-           android:layout_marginVertical="20dp"
-            android:id="@+id/tv_film_nameRu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="sfujsfsjkzzc"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:fontFamily="@font/font_roboto"
-            tools:text="Мастер и Маргарита" />
-
-        <TextView
-            android:id="@+id/tv_film_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/font_roboto_medium"
-            android:textColor="@color/gray"
-            android:textSize="14sp"
-            android:layout_marginVertical="5dp"
-            android:text="sfujsfsjkzzcdssssskdklfjdskljfklshdfjhgjksdfgsdhjkfhgjkdhfjgjksdfhlsjghldfkjgkdfhsjkdhgjkdfhgjkhdfjkghdjkfhgkjdfhsgkjdfhgjkhdsfjkghdjkfghjksdfhgjkdfjkghsdfjkhg"
-            tools:text="Мастер и Маргарита" />
-
-        <TextView
-            android:id="@+id/tv_film_countries"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/font_roboto_medium"
-            android:textColor="@color/gray"
-            android:textSize="14sp"
-            android:layout_marginVertical="5dp"
-            android:text="sfujsfsjkzzc"
-            tools:text="Мастер и Маргарита" />
-
-        <TextView
-            android:id="@+id/tv_film_genres"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/font_roboto_medium"
-            android:textColor="@color/gray"
-            android:textSize="14sp"
-            android:layout_marginVertical="5dp"
-            android:text="sfujsfsjkzzc"
-            tools:text="Мастер и Маргарита" />
-
-    </LinearLayout>
-</ScrollView>
+    </FrameLayout>
+</layout>

@@ -1,13 +1,15 @@
 package ru.nikolas_snek.kinopoiskapi.presentation.film_info
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.squareup.picasso.Picasso
 import ru.nikolas_snek.kinopoiskapi.databinding.FragmentFilmInfoBinding
 
 class FilmInfoFragment : Fragment() {
@@ -39,10 +41,28 @@ class FilmInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Picasso.get().load("https://kinopoiskapiunofficial.tech/images/posters/kp/4507204.jpg")
-            .into(binding.ivFilmPoster)
         viewModal.filmInfo.observe(viewLifecycleOwner){
-            binding.tvFilmCountries.text = it.nameRu
+            if (it == null) {
+                binding.emFullFilm.isVisible = true
+                binding.svContent.isVisible = false
+            } else {
+                Log.d("film", it.toString())
+                binding.fullFilm = it
+                binding.emFullFilm.isVisible = false
+                binding.svContent.isVisible = true
+
+
+            }
+        }
+        viewModal.loadingProgress.observe(viewLifecycleOwner){
+            binding.pbFullFilm.isVisible = it
+        }
+        binding.emFullFilm.setRetryButtonClickListener{
+            viewModal.loadFilmInfo()
+        }
+
+        binding.ivBack.setOnClickListener{
+            findNavController().popBackStack()
         }
     }
 
@@ -50,9 +70,4 @@ class FilmInfoFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    companion object {
-        fun newInstance() = FilmInfoFragment()
-    }
-
 }

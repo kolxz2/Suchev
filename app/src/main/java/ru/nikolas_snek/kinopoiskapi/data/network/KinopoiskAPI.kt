@@ -1,6 +1,5 @@
 package ru.nikolas_snek.kinopoiskapi.data.network
 
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -8,7 +7,7 @@ import retrofit2.http.Query
 
 interface KinopoiskAPI {
 
-    @GET("api/v2.2/films/{filmId}")
+    @GET("films/{filmId}")
     suspend fun getFullFilm(
         @Header("X-API-KEY") apiKey: String?,
         @Path("filmId") filmId: Int,

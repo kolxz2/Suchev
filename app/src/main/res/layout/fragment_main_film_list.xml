@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.main_film_list.MainFilmListFragment">
+<layout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_films_list"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_film2"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        tools:context=".presentation.main_film_list.MainFilmListFragment">
 
 
-</FrameLayout>
+        <ProgressBar
+            android:id="@+id/pb_recycler_films"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <ru.nikolas_snek.kinopoiskapi.presentation.utils.ErrorMessageView
+            android:id="@+id/em_recycler_films"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_films_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_film" />
+
+
+    </FrameLayout>
+</layout>

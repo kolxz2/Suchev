@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.fragment.findNavController
 import ru.nikolas_snek.kinopoiskapi.R
@@ -27,7 +28,7 @@ class MainFilmListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentMainFilmListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,13 +37,27 @@ class MainFilmListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         fragmentContainerView = requireActivity().findViewById(R.id.portrait_container_view)
-        viewModel = ViewModelProvider(this).get(MainFilmListViewModel::class.java)
+        viewModel = ViewModelProvider(this)[MainFilmListViewModel::class.java]
         viewModel.getAllFilms()
         viewModel.filmsList.observe(viewLifecycleOwner) {
-            filmsListAdapter.submitList(it)
+            if (it == null) {
+                binding.emRecyclerFilms.visibility = View.VISIBLE
+                binding.rvFilmsList.visibility = View.GONE
+            } else {
+                filmsListAdapter.submitList(it)
+                binding.emRecyclerFilms.visibility = View.GONE
+                binding.rvFilmsList.visibility = View.VISIBLE
+            }
+        }
+        viewModel.loadingProgress.observe(viewLifecycleOwner) {
+            binding.pbRecyclerFilms.isVisible = it
+        }
+        binding.emRecyclerFilms.setRetryButtonClickListener {
+            viewModel.getAllFilms()
+            binding.emRecyclerFilms.visibility = View.GONE
+
         }
     }
-
 
     private fun setupRecyclerView() {
         val rvFilmsList = binding.rvFilmsList
@@ -61,9 +76,10 @@ class MainFilmListFragment : Fragment() {
             findNavController().navigate(
                 MainFilmListFragmentDirections.actionMainFilmListFragmentToFilmInfoFragment(
                     it.filmId
-                ))
+                )
+            )
 
-                // bcgjkmpjdfnm
+            // на будущее при разделении экрана
 //            if (fragmentContainerView == null) {
 //                val intent = ShopItemActivity.newIntentEditItem(this, it.id)
 //                startActivity(intent)
@@ -77,10 +93,6 @@ class MainFilmListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        fun newInstance() = MainFilmListFragment()
     }
 
 }

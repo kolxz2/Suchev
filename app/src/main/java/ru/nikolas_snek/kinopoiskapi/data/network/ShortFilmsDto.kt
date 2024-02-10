@@ -7,6 +7,7 @@ data class ShortFilmsDto(
     val nameRu: String,
     val year: String,
     val posterUrlPreview: String,
+    val genres: List<GenresDto>,
 )
 
 data class ShortResponse(
@@ -18,5 +19,6 @@ fun ShortFilmsDto.toShortFilms() = ShortFilms(
     filmId=filmId,
     nameRu=nameRu,
     year=year,
-    posterUrlPreview=posterUrlPreview
+    posterUrlPreview=posterUrlPreview,
+    genres=genres.map { it.toGenres() },
 )

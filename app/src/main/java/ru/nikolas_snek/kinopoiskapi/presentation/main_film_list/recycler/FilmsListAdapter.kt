@@ -4,15 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.squareup.picasso.Picasso
-import ru.nikolas_snek.kinopoiskapi.databinding.ItemFilm2Binding
+import ru.nikolas_snek.kinopoiskapi.R
+import ru.nikolas_snek.kinopoiskapi.databinding.ItemFilmBinding
 import ru.nikolas_snek.kinopoiskapi.doimain.models.ShortFilms
 
 class FilmsListAdapter: ListAdapter<ShortFilms, FilmItemViewHolder>(FilmItemDiffUtilCallback())  {
 
-    var onShopItemLongClickListener: ((ShortFilms) -> Unit)? = null
+//    var onShopItemLongClickListener: ((ShortFilms) -> Unit)? = null
     var onShopItemClickListener: ((ShortFilms) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmItemViewHolder {
-        val binding = ItemFilm2Binding.inflate(
+        val binding = ItemFilmBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -27,7 +28,12 @@ class FilmsListAdapter: ListAdapter<ShortFilms, FilmItemViewHolder>(FilmItemDiff
             onShopItemClickListener?.invoke(filmItem)
         }
         binding.tvFilmName.text = filmItem.nameRu
-        binding.tvFilmInfo.text = filmItem.year
+
+        binding.tvFilmInfo.text = String.format(
+            binding.root.context.getString(R.string.short_info_template),
+            filmItem.genres.first().genre,
+            filmItem.year
+        )
         Picasso.get().load(filmItem.posterUrlPreview).into(binding.ivFilmPosterPreview)
     }
 }
