@@ -2,7 +2,7 @@
 <androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/portrait_container_view"
+    android:id="@+id/container_view"
     android:name="androidx.navigation.fragment.NavHostFragment"
     app:navGraph="@navigation/show_info_navigation"
     app:defaultNavHost="true"

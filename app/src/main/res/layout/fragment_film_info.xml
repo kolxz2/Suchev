@@ -33,17 +33,15 @@
             android:id="@+id/sv_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
-            tools:ignore="UselessParent">
+            android:visibility="visible">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_gravity="end"
                 android:orientation="vertical"
                 android:visibility="visible">
-
 
 
                 <ImageView
@@ -108,17 +106,17 @@
         </ScrollView>
 
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|top"
-            android:paddingVertical="10dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginStart="20dp"
-            android:paddingHorizontal="10dp"
-            android:src="@drawable/ic_back"
-            android:contentDescription="@string/icon_work_like_backpressed" />
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_back"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="start|top"-->
+<!--            android:paddingVertical="10dp"-->
+<!--            android:layout_marginTop="40dp"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:paddingHorizontal="10dp"-->
+<!--            android:src="@drawable/ic_back"-->
+<!--            android:contentDescription="@string/icon_work_like_backpressed" />-->
 
     </FrameLayout>
 </layout>

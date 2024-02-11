@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.nikolas_snek.kinopoiskapi.databinding.FragmentFilmInfoBinding
 
@@ -16,8 +15,15 @@ class FilmInfoFragment : Fragment() {
 
 
     private val args by navArgs<FilmInfoFragmentArgs>()
+
     private val gameFragmentViewModelFactory by lazy {
-        FilmInfoFragmentViewModelFactory(args.filmId)
+        val filmId = requireArguments().getInt(FILM_IF_KEY)
+        if (filmId == 0){
+            FilmInfoFragmentViewModelFactory(args.filmId)
+        } else{
+            FilmInfoFragmentViewModelFactory(filmId)
+        }
+
     }
     private val viewModal: FilmInfoViewModel by lazy {
         ViewModelProvider(
@@ -61,13 +67,28 @@ class FilmInfoFragment : Fragment() {
             viewModal.loadFilmInfo()
         }
 
-        binding.ivBack.setOnClickListener{
-            findNavController().popBackStack()
-        }
+//        binding.ivBack.setOnClickListener{
+//            findNavController().popBackStack()
+//        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+    companion object{
+
+        private const val FILM_IF_KEY = "FILM_IF_KEY"
+
+        fun newInstance(filmId: Int): FilmInfoFragment{
+            return FilmInfoFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(FILM_IF_KEY,filmId)
+                }
+            }
+        }
+    }
+
+
 }

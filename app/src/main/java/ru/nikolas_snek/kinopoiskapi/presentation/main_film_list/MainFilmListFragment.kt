@@ -1,16 +1,17 @@
 package ru.nikolas_snek.kinopoiskapi.presentation.main_film_list
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import ru.nikolas_snek.kinopoiskapi.R
 import ru.nikolas_snek.kinopoiskapi.databinding.FragmentMainFilmListBinding
+import ru.nikolas_snek.kinopoiskapi.presentation.film_info.FilmInfoFragment
 import ru.nikolas_snek.kinopoiskapi.presentation.main_film_list.recycler.FilmsListAdapter
 
 class MainFilmListFragment : Fragment() {
@@ -18,7 +19,7 @@ class MainFilmListFragment : Fragment() {
 
     private lateinit var viewModel: MainFilmListViewModel
     private lateinit var filmsListAdapter: FilmsListAdapter
-    private var fragmentContainerView: FragmentContainerView? = null
+    private var subsidiaryFragmentContainerView: FragmentContainerView? = null
 
     private var _binding: FragmentMainFilmListBinding? = null
     private val binding: FragmentMainFilmListBinding
@@ -36,7 +37,7 @@ class MainFilmListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        fragmentContainerView = requireActivity().findViewById(R.id.portrait_container_view)
+        subsidiaryFragmentContainerView = requireActivity().findViewById(R.id.support_container_view)
         viewModel = ViewModelProvider(this)[MainFilmListViewModel::class.java]
         viewModel.getAllFilms()
         viewModel.filmsList.observe(viewLifecycleOwner) {
@@ -73,22 +74,43 @@ class MainFilmListFragment : Fragment() {
 
     private fun setupClickListener() {
         filmsListAdapter.onShopItemClickListener = {
-            findNavController().navigate(
-                MainFilmListFragmentDirections.actionMainFilmListFragmentToFilmInfoFragment(
-                    it.filmId
-                )
-            )
-
             // на будущее при разделении экрана
-//            if (fragmentContainerView == null) {
-//                val intent = ShopItemActivity.newIntentEditItem(this, it.id)
-//                startActivity(intent)
-//            } else {
-//                launchFragment(ShopItemFragment.newIntentEditItem(it.id))
-//            }
+            if (subsidiaryFragmentContainerView == null) {
+                findNavController().navigate(
+                    MainFilmListFragmentDirections.actionMainFilmListFragmentToFilmInfoFragment(
+                        it.filmId
+                    )
+                )
+            } else {
+//                findNavController().navigate(
+//                    MainFilmListFragmentDirections.actionMainFilmListFragmentToFilmInfoFragment(
+//                        it.filmId
+//                    )
+//                )
+                 requireActivity().supportFragmentManager.popBackStack()
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(
+                        R.id.support_container_view,
+                        FilmInfoFragment.newInstance(it.filmId)
+                    )
+                    .addToBackStack(null)
+                    .commit()
+
+            }
 
         }
     }
+
+//    private fun launchFragment(fragment: Fragment) {
+//        supportFragmentManager.popBackStack()
+//        supportFragmentManager.beginTransaction()
+//            .replace(
+//                R.id.shop_item_container,
+//                fragment
+//            )
+//            .addToBackStack(null)
+//            .commit()
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
