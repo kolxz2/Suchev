@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs")
     id("kotlin-kapt")
+    id ("kotlin-android")
 }
 
 android {
@@ -76,4 +77,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     // Image
     implementation("com.squareup.picasso:picasso:2.71828")
+    // Paging
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+    // Room
+
+
 }

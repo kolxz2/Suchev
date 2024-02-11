@@ -2,7 +2,7 @@ package ru.nikolas_snek.kinopoiskapi.doimain
 
 import ru.nikolas_snek.kinopoiskapi.doimain.repository.Repository
 
-class GetFilmDetailInfo(
+class GetFilmDetailInfoUseCase(
     private val repository: Repository,
     private val filmId: Int
 ) {

@@ -8,21 +8,12 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
 import ru.nikolas_snek.kinopoiskapi.databinding.FragmentFilmInfoBinding
 
 class FilmInfoFragment : Fragment() {
 
-
-    private val args by navArgs<FilmInfoFragmentArgs>()
-
     private val gameFragmentViewModelFactory by lazy {
-        val filmId = requireArguments().getInt(FILM_IF_KEY)
-        if (filmId == 0){
-            FilmInfoFragmentViewModelFactory(args.filmId)
-        } else{
-            FilmInfoFragmentViewModelFactory(filmId)
-        }
+        FilmInfoFragmentViewModelFactory(requireArguments().getInt(FILM_IF_KEY), requireActivity().application)
 
     }
     private val viewModal: FilmInfoViewModel by lazy {
@@ -47,7 +38,7 @@ class FilmInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModal.filmInfo.observe(viewLifecycleOwner){
+        viewModal.filmInfo.observe(viewLifecycleOwner) {
             if (it == null) {
                 binding.emFullFilm.isVisible = true
                 binding.svContent.isVisible = false
@@ -60,16 +51,13 @@ class FilmInfoFragment : Fragment() {
 
             }
         }
-        viewModal.loadingProgress.observe(viewLifecycleOwner){
+        viewModal.loadingProgress.observe(viewLifecycleOwner) {
             binding.pbFullFilm.isVisible = it
         }
-        binding.emFullFilm.setRetryButtonClickListener{
+        binding.emFullFilm.setRetryButtonClickListener {
             viewModal.loadFilmInfo()
         }
 
-//        binding.ivBack.setOnClickListener{
-//            findNavController().popBackStack()
-//        }
     }
 
     override fun onDestroyView() {
@@ -77,14 +65,14 @@ class FilmInfoFragment : Fragment() {
         _binding = null
     }
 
-    companion object{
+    companion object {
 
         private const val FILM_IF_KEY = "FILM_IF_KEY"
 
-        fun newInstance(filmId: Int): FilmInfoFragment{
+        fun newInstance(filmId: Int): FilmInfoFragment {
             return FilmInfoFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(FILM_IF_KEY,filmId)
+                    putInt(FILM_IF_KEY, filmId)
                 }
             }
         }

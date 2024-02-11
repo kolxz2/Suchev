@@ -25,12 +25,18 @@ data class GenresDto(
 fun CountriesDto.toCountries() = Countries(
     country = country
 )
+//fun CountriesDto.toCountryEntity() = CountryEntity(
+//    country = country
+//)
+
 
 fun GenresDto.toGenres() = Genres(
     genre = genre
-
-
 )
+
+//fun GenresDto.toGenreEntity() = GenreEntity(
+//    genre = genre
+//)
 
 fun FullFilmDto.toFullFilm() = FullFilm(
     filmId = filmId,
@@ -40,3 +46,12 @@ fun FullFilmDto.toFullFilm() = FullFilm(
     countries = countries.map { it.toCountries() },
     genres = genres.map { it.toGenres() },
 )
+
+//fun FullFilmDto.toFullFilmEntity() = FullFilmEntity(
+//    filmId = filmId,
+//    nameRu = nameRu,
+//    posterUrl = posterUrl,
+//    description = description,
+//    countries = countries.map { it.toCountryEntity() },
+//    genres = genres.map { it.toGenreEntity() },
+//)

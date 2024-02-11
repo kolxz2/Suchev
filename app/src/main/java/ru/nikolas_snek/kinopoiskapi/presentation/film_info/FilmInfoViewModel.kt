@@ -1,20 +1,23 @@
 package ru.nikolas_snek.kinopoiskapi.presentation.film_info
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.nikolas_snek.kinopoiskapi.data.RepositoryImpl
-import ru.nikolas_snek.kinopoiskapi.doimain.GetFilmDetailInfo
+import ru.nikolas_snek.kinopoiskapi.doimain.GetFilmDetailInfoUseCase
 import ru.nikolas_snek.kinopoiskapi.doimain.models.FullFilm
 import ru.nikolas_snek.kinopoiskapi.doimain.repository.RequestResult
 
 class FilmInfoViewModel(
     private val filmId: Int,
-) : ViewModel() {
+    application: Application
+)  : AndroidViewModel(application) {
 
-    private val repositoryImpl = RepositoryImpl()
+    private val repositoryImpl = RepositoryImpl(application)
 
     private val _filmInfo = MutableLiveData<FullFilm?>()
     val filmInfo: LiveData<FullFilm?>
@@ -28,7 +31,7 @@ class FilmInfoViewModel(
         viewModelScope.launch {
             _loadingProgress.value = true
             val requestResult =
-                GetFilmDetailInfo(repository = repositoryImpl, filmId = filmId).invoke()
+                GetFilmDetailInfoUseCase(repository = repositoryImpl, filmId = filmId).invoke()
             _loadingProgress.value = false
             when(requestResult){
                 is RequestResult.Success -> {
@@ -43,4 +46,6 @@ class FilmInfoViewModel(
 
         }
     }
+
+
 }
