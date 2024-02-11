@@ -10,7 +10,7 @@ import ru.nikolas_snek.kinopoiskapi.doimain.models.ShortFilms
 
 class FilmsListAdapter: PagingDataAdapter<ShortFilms, FilmItemViewHolder>(FilmItemDiffUtilCallback())  {
 
-    var onShopItemLongClickListener: ((ShortFilms) -> Unit)? = null
+    var onFilmItemLongClickListener: ((ShortFilms) -> Unit)? = null
     var onShopItemClickListener: ((ShortFilms) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmItemViewHolder {
         val binding = ItemFilmBinding.inflate(
@@ -25,7 +25,7 @@ class FilmsListAdapter: PagingDataAdapter<ShortFilms, FilmItemViewHolder>(FilmIt
         val filmItem = getItem(position)!!
         val binding = viewHolder.binding
         binding.root.setOnLongClickListener {
-            onShopItemLongClickListener?.invoke(filmItem)
+            onFilmItemLongClickListener?.invoke(filmItem)
             true
         }
         binding.root.setOnClickListener {

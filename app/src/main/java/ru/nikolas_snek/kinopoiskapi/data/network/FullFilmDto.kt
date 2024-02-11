@@ -6,10 +6,11 @@ import ru.nikolas_snek.kinopoiskapi.doimain.models.Genres
 
 
 data class FullFilmDto(
-    val filmId: Int,
+    val kinopoiskId: Int,
     val nameRu: String,
     val posterUrl: String,
     val description: String,
+    val year: Int?,
     val countries: List<CountriesDto>,
     val genres: List<GenresDto>,
 )
@@ -25,21 +26,15 @@ data class GenresDto(
 fun CountriesDto.toCountries() = Countries(
     country = country
 )
-//fun CountriesDto.toCountryEntity() = CountryEntity(
-//    country = country
-//)
-
 
 fun GenresDto.toGenres() = Genres(
     genre = genre
 )
 
-//fun GenresDto.toGenreEntity() = GenreEntity(
-//    genre = genre
-//)
+
 
 fun FullFilmDto.toFullFilm() = FullFilm(
-    filmId = filmId,
+    filmId = kinopoiskId,
     nameRu = nameRu,
     posterUrl = posterUrl,
     description = description,
@@ -47,11 +42,3 @@ fun FullFilmDto.toFullFilm() = FullFilm(
     genres = genres.map { it.toGenres() },
 )
 
-//fun FullFilmDto.toFullFilmEntity() = FullFilmEntity(
-//    filmId = filmId,
-//    nameRu = nameRu,
-//    posterUrl = posterUrl,
-//    description = description,
-//    countries = countries.map { it.toCountryEntity() },
-//    genres = genres.map { it.toGenreEntity() },
-//)

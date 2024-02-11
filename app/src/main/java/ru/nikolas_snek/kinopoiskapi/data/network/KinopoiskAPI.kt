@@ -13,7 +13,7 @@ interface KinopoiskAPI {
         @Path("filmId") filmId: Int,
     ): FullFilmDto
 
-    @GET("films/top?type=TOP_100_POPULAR_FILMS")
+    @GET("films/top")
     suspend fun getPopularFilms(
         @Header("X-API-KEY") apiKey: String?,
         @Query("page") page: Int,

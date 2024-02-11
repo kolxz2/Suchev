@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.nikolas_snek.kinopoiskapi.data.RepositoryImpl
+import ru.nikolas_snek.kinopoiskapi.data.database.FilmDatabase
 import ru.nikolas_snek.kinopoiskapi.doimain.GetFilmDetailInfoUseCase
 import ru.nikolas_snek.kinopoiskapi.doimain.models.FullFilm
 import ru.nikolas_snek.kinopoiskapi.doimain.repository.RequestResult
@@ -17,7 +18,12 @@ class FilmInfoViewModel(
     application: Application
 )  : AndroidViewModel(application) {
 
-    private val repositoryImpl = RepositoryImpl(application)
+    private val repositoryImpl: RepositoryImpl
+
+    init {
+        val userDao = FilmDatabase.getDatabase(application).userDao()
+        repositoryImpl = RepositoryImpl(userDao)
+    }
 
     private val _filmInfo = MutableLiveData<FullFilm?>()
     val filmInfo: LiveData<FullFilm?>

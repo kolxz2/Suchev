@@ -15,12 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
-        <ru.nikolas_snek.kinopoiskapi.presentation.utils.ErrorMessageView
-            android:id="@+id/em_recycler_films"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_films_list"
@@ -29,6 +24,12 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_film" />
 
+        <ru.nikolas_snek.kinopoiskapi.presentation.utils.ErrorMessageView
+            android:id="@+id/em_recycler_films"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
     </FrameLayout>
 </layout>

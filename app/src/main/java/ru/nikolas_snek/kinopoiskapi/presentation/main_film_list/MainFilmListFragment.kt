@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -16,6 +17,7 @@ import ru.nikolas_snek.kinopoiskapi.R
 import ru.nikolas_snek.kinopoiskapi.databinding.FragmentMainFilmListBinding
 import ru.nikolas_snek.kinopoiskapi.presentation.film_info.FilmInfoFragment
 import ru.nikolas_snek.kinopoiskapi.presentation.main_film_list.recycler.FilmsListAdapter
+import ru.nikolas_snek.kinopoiskapi.presentation.main_film_list.recycler.FilmsLoadStateAdapter
 
 class MainFilmListFragment : Fragment() {
 
@@ -24,16 +26,14 @@ class MainFilmListFragment : Fragment() {
     private lateinit var filmsListAdapter: FilmsListAdapter
     private var subsidiaryFragmentContainerView: FragmentContainerView? = null
 
-    private var _binding: FragmentMainFilmListBinding? = null
-    private val binding: FragmentMainFilmListBinding
-        get() = _binding ?: throw RuntimeException("FragmentChooseLevelBinding = null")
+    private lateinit var binding: FragmentMainFilmListBinding
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentMainFilmListBinding.inflate(inflater, container, false)
+        binding = FragmentMainFilmListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -46,20 +46,28 @@ class MainFilmListFragment : Fragment() {
         viewModel.getAllFilms()
         binding.rvFilmsList.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = filmsListAdapter
+            val loadStateAdapter = FilmsLoadStateAdapter()
+            adapter =
+                filmsListAdapter.withLoadStateFooter(loadStateAdapter)
             lifecycleScope.launch {
                 viewModel.filmsFlow.collectLatest { pagingData ->
                     filmsListAdapter.submitData(pagingData)
                 }
             }
         }
-        viewModel.loadingProgress.observe(viewLifecycleOwner) {
-            binding.pbRecyclerFilms.isVisible = it
-        }
         binding.emRecyclerFilms.setRetryButtonClickListener {
-            viewModel.getAllFilms()
             binding.emRecyclerFilms.visibility = View.GONE
+            filmsListAdapter.retry()
+            viewModel.getAllFilms()
+        }
 
+        filmsListAdapter.addLoadStateListener {
+            binding.rvFilmsList.isVisible = it.refresh != LoadState.Loading
+            binding.pbRecyclerFilms.isVisible = it.refresh == LoadState.Loading
+            val errorState = it.refresh as? LoadState.Error
+            if (errorState != null) {
+                binding.emRecyclerFilms.visibility = View.VISIBLE
+                 }
         }
     }
 
@@ -76,13 +84,13 @@ class MainFilmListFragment : Fragment() {
     }
 
     private fun setupLongClickListener() {
-        filmsListAdapter.onShopItemLongClickListener = {
+        filmsListAdapter.onFilmItemLongClickListener = {
             viewModel.saveFilmToFavorite(it.filmId)
         }
     }
+
     private fun setupClickListener() {
         filmsListAdapter.onShopItemClickListener = {
-            // на будущее при разделении экрана
             if (subsidiaryFragmentContainerView == null) {
                 requireActivity().supportFragmentManager.popBackStack()
                 requireActivity().supportFragmentManager.beginTransaction()
@@ -107,24 +115,8 @@ class MainFilmListFragment : Fragment() {
         }
     }
 
-//    private fun launchFragment(fragment: Fragment) {
-//        supportFragmentManager.popBackStack()
-//        supportFragmentManager.beginTransaction()
-//            .replace(
-//                R.id.shop_item_container,
-//                fragment
-//            )
-//            .addToBackStack(null)
-//            .commit()
-//    }
-
     companion object {
         fun newInstance() = MainFilmListFragment()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }

@@ -1,10 +1,11 @@
 package ru.nikolas_snek.kinopoiskapi.data
 
-import android.app.Application
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
+import ru.nikolas_snek.kinopoiskapi.data.database.FilmDao
+import ru.nikolas_snek.kinopoiskapi.data.database.FilmEntity
 import ru.nikolas_snek.kinopoiskapi.data.network.KinopoiskAPI
 import ru.nikolas_snek.kinopoiskapi.data.network.RetrofitInstance
 import ru.nikolas_snek.kinopoiskapi.data.network.toFullFilm
@@ -14,7 +15,7 @@ import ru.nikolas_snek.kinopoiskapi.doimain.repository.Repository
 import ru.nikolas_snek.kinopoiskapi.doimain.repository.RequestResult
 
 class RepositoryImpl(
-    private val application: Application
+    private val dao: FilmDao
 ) : Repository {
     companion object {
         private const val X_API_KEY = "e30ffed0-76ab-4dd6-b41f-4c9da2b2735b"
@@ -45,7 +46,14 @@ class RepositoryImpl(
     }
 
     override suspend fun saveToFavorites(filmId: Int) {
-//        val film = retrofitInstance.getFullFilm(filmId = filmId, apiKey = X_API_KEY).toFullFilmEntity()
+        val film = retrofitInstance.getFullFilm(filmId = filmId, apiKey = X_API_KEY)
+        val filmBD = FilmEntity(
+            filmId=film.kinopoiskId,
+            nameRu=film.nameRu,
+                    year=film.year.toString(),
+                    posterUrlPreview=film.posterUrl,
+        )
+        dao.addFilm(filmBD)
     }
 
 }

@@ -9,26 +9,29 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import ru.nikolas_snek.kinopoiskapi.data.RepositoryImpl
+import ru.nikolas_snek.kinopoiskapi.data.database.FilmDatabase
 import ru.nikolas_snek.kinopoiskapi.doimain.GetAllFilmsUseCase
 import ru.nikolas_snek.kinopoiskapi.doimain.SaveToFavoritesUseCase
 import ru.nikolas_snek.kinopoiskapi.doimain.models.ShortFilms
 
 class MainFilmListViewModel(application: Application) : AndroidViewModel(application) {
-    private val repositoryImpl = RepositoryImpl(application)
+    private val repositoryImpl: RepositoryImpl
 
-    lateinit var filmsFlow : Flow<PagingData<ShortFilms>>
-    private val _loadingProgress = MutableLiveData<Boolean>()
-    val loadingProgress: LiveData<Boolean>
-        get() = _loadingProgress
+    init {
+        val userDao = FilmDatabase.getDatabase(application).userDao()
+        repositoryImpl = RepositoryImpl(userDao)
+    }
+
+    lateinit var filmsFlow: Flow<PagingData<ShortFilms>>
+
 
     fun getAllFilms() {
         viewModelScope.launch {
-            _loadingProgress.value = true
             filmsFlow = GetAllFilmsUseCase(repositoryImpl).invoke()
-            _loadingProgress.value = false
         }
     }
-    fun saveFilmToFavorite(filmId: Int){
+
+    fun saveFilmToFavorite(filmId: Int) {
         viewModelScope.launch {
             SaveToFavoritesUseCase(repositoryImpl, filmId).invoke()
         }

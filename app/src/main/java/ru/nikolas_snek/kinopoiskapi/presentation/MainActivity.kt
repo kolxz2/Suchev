@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //todo после переворота запоминать выбраный экран
         binding.bnvMenu?.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.favorites -> {
