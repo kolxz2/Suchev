@@ -2,6 +2,7 @@ package ru.nikolas_snek.kinopoiskapi.presentation.main_film_list.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import com.squareup.picasso.Picasso
 import ru.nikolas_snek.kinopoiskapi.R
@@ -38,6 +39,7 @@ class FilmsListAdapter: PagingDataAdapter<ShortFilms, FilmItemViewHolder>(FilmIt
             filmItem.genres.first().genre,
             filmItem.year
         )
+        binding.ivIsFavorite.isVisible = filmItem.isFavorite
         Picasso.get().load(filmItem.posterUrlPreview).into(binding.ivFilmPosterPreview)
     }
 }

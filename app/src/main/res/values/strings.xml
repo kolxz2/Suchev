@@ -11,5 +11,6 @@
     <string name="icon_work_like_backpressed">Icon work like backpressed</string>
     <string name="populars">Популярные</string>
     <string name="favorites">Избранные</string>
+    <string name="icon_to_show_that_it_favorite_move">Icon to show that it favorite move</string>
 
 </resources>

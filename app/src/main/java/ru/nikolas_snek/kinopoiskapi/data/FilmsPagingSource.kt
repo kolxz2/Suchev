@@ -2,12 +2,14 @@ package ru.nikolas_snek.kinopoiskapi.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import ru.nikolas_snek.kinopoiskapi.data.database.FilmDao
 import ru.nikolas_snek.kinopoiskapi.data.network.KinopoiskAPI
 import ru.nikolas_snek.kinopoiskapi.data.network.toShortFilms
 import ru.nikolas_snek.kinopoiskapi.doimain.models.ShortFilms
 
 class FilmsPagingSource(
     private val retrofitInstance: KinopoiskAPI,
+    private val dao: FilmDao,
 ) : PagingSource<Int, ShortFilms>() {
 
     companion object {
@@ -28,7 +30,11 @@ class FilmsPagingSource(
             val response =
                 retrofitInstance.getPopularFilms(apiKey = X_API_KEY, page = nextPageNumber)
             val data = response.films.map {
-                it.toShortFilms()
+                val isFavoriteFilm = dao.countFilmsWithId(it.filmId)
+                it.toShortFilms().apply {
+                    isFavorite = isFavoriteFilm != 0
+                }
+
             }
             LoadResult.Page(
                 data = data,

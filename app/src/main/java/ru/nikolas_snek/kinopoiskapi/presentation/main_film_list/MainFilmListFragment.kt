@@ -10,11 +10,16 @@ import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.nikolas_snek.kinopoiskapi.R
 import ru.nikolas_snek.kinopoiskapi.databinding.FragmentMainFilmListBinding
+import ru.nikolas_snek.kinopoiskapi.doimain.models.ShortFilms
 import ru.nikolas_snek.kinopoiskapi.presentation.film_info.FilmInfoFragment
 import ru.nikolas_snek.kinopoiskapi.presentation.main_film_list.recycler.FilmsListAdapter
 import ru.nikolas_snek.kinopoiskapi.presentation.main_film_list.recycler.FilmsLoadStateAdapter
@@ -58,7 +63,6 @@ class MainFilmListFragment : Fragment() {
         binding.emRecyclerFilms.setRetryButtonClickListener {
             binding.emRecyclerFilms.visibility = View.GONE
             filmsListAdapter.retry()
-            viewModel.getAllFilms()
         }
 
         filmsListAdapter.addLoadStateListener {
@@ -83,8 +87,29 @@ class MainFilmListFragment : Fragment() {
         setupClickListener()
     }
 
+    private fun updatePagingData(
+        filmsFlow: Flow<PagingData<ShortFilms>>,
+        desiredFilmId: Int,
+    ): Flow<PagingData<ShortFilms>> {
+        return filmsFlow.map { pagingData ->
+            pagingData.map { film ->
+                if (film.filmId == desiredFilmId) {
+                    film.copy(isFavorite = true)
+                } else {
+                    film
+                }
+            }
+        }
+    }
+
     private fun setupLongClickListener() {
         filmsListAdapter.onFilmItemLongClickListener = {
+            lifecycleScope.launch {
+                updatePagingData(viewModel.filmsFlow, it.filmId)
+                    .collectLatest { pagingData ->
+                        filmsListAdapter.submitData(pagingData)
+                    }
+            }
             viewModel.saveFilmToFavorite(it.filmId)
         }
     }
